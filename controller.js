@@ -12,6 +12,7 @@ console.log('game: ', game);
 const keyboardListener = createKeyboardListener();
 keyboardListener.subscribe(game.movePlayer);
 game.addPlayer({playerId: 'player1', playerX: 1, playerY: 1, width: 1, height: 1, color: 'black'});
+game.addPlayer({playerId: 'player2', playerX: 9, playerY: 1, width: 1, height: 1, color: 'black'});
 game.addFruit({fruitId: 'fruit1', fruitX: 4, fruitY: 2, width: 1, height: 1, color: 'green'});
 game.addFruit({fruitId: 'fruit2', fruitX: 9, fruitY: 8, width: 1, height: 1, color: 'green'});
 game.addFruit({fruitId: 'fruit3', fruitX: 5, fruitY: 5, width: 1, height: 1, color: 'green'});
@@ -86,25 +87,23 @@ function createGame() {
         }
 
         const player = state.players[command.playerId];
+        const playerId = command.playerId;
         const keyPressed = command.keyPressed;
         const moveFunction = acceptedMoves[keyPressed];
 
         if (moveFunction) {
             moveFunction(player);
-            checkForFruitCollision();
+            checkForFruitCollision(playerId);
         }
 
-        function checkForFruitCollision() { // Brute force
-            let player;
+        function checkForFruitCollision(playerId) { // Brute force
             let fruit;
-            for (const playerId in state.players) {
-                player = state.players[playerId];
-                for (const fruitId in state.fruits) {
-                    fruit = state.fruits[fruitId];
-                    if (player.x === fruit.x && player.y === fruit.y) {
-                        console.log(`Collision between player ${playerId} and fruit ${fruitId}`);
-                        removeFruit({fruitId})
-                    }
+            const player = state.players[playerId];
+            for (const fruitId in state.fruits) {
+                fruit = state.fruits[fruitId];
+                if (player.x === fruit.x && player.y === fruit.y) {
+                    console.log(`Collision between player ${playerId} and fruit ${fruitId}`);
+                    removeFruit({fruitId})
                 }
             }
         }
