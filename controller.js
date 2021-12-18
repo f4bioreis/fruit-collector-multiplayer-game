@@ -12,10 +12,16 @@ const state = {
     }
 };
 
+const game = createGame();
+const keyboardListener = createKeyboardListener();
+keyboardListener.subscribe(game.movePlayer);
+renderScreen();
+
 function createGame() {
     
     function movePlayer(command) {
         console.log(`Moving player ${command.playerId} with command ${command.keyDown}`);
+        const player = state.players[command.playerId];
         const keyPressed = command.keyPressed;
         if (keyPressed === 'ArrowUp' && player.y - 1 >= 0) {
             player.y--;
@@ -40,13 +46,14 @@ function createGame() {
     };
 }
 
-const game = createGame();
-const keyboardListener = createKeyboardListener();
+
 
 function createKeyboardListener() {
     const state = {
         observers: []
     };
+    document.addEventListener('keydown', handleKeydown);
+    return { subscribe };
 
     function subscribe(observerFunction) {
         state.observers.push(observerFunction);
@@ -60,8 +67,6 @@ function createKeyboardListener() {
         }
     }
 
-    document.addEventListener('keydown', handleKeydown);
-
     function handleKeydown(event) {
         const keyPressed = event.key;
 
@@ -73,12 +78,8 @@ function createKeyboardListener() {
         notifyAll(command);
     }
 
-    return {
-        subscribe
-    };
 }
 
-renderScreen();
 function renderScreen() {
     context.fillStyle = 'white';
     context.clearRect(0, 0, 10, 10);
