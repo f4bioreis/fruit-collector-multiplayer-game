@@ -93,7 +93,7 @@ export default function createGame() {
                 fruit = state.fruits[fruitId];
                 if (player.x === fruit.x && player.y === fruit.y) {
                     console.log(`Collision between player ${playerId} and fruit ${fruitId}`);
-                    removeFruit({fruitId})
+                    removeFruit({fruitId});
                 }
             }
         }

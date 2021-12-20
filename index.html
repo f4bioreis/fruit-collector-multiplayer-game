@@ -13,14 +13,16 @@
                     image-rendering: -moz-crisp-edges;
                 }
             </style>
+            <script src="./node_modules/socket.io/client-dist/socket.io.js"></script>
         </meta>
     </head>
     <body>
         <canvas id="screen" width="10" height="10"></canvas>
         <script type="module">
-            import createGame from './game.js';
-            import createKeyboardListener from './keyboard-listener.js';
-            import renderScreen from './render-screen.js';
+            import createGame from '../public/game.js';
+            import createKeyboardListener from '../public/keyboard-listener.js';
+            import renderScreen from '../public/render-screen.js';
+
 
             const game = createGame();
             const keyboardListener = createKeyboardListener(document);
@@ -29,13 +31,11 @@
             const screen = document.getElementById('screen');
             renderScreen(screen, game, requestAnimationFrame);
 
-            game.addPlayer({playerId: 'player1', playerX: 1, playerY: 1, width: 1, height: 1, color: 'black'});
-            game.addPlayer({playerId: 'player2', playerX: 9, playerY: 1, width: 1, height: 1, color: 'black'});
-            game.addFruit({fruitId: 'fruit1', fruitX: 4, fruitY: 2, width: 1, height: 1, color: 'green'});
-            game.addFruit({fruitId: 'fruit2', fruitX: 9, fruitY: 8, width: 1, height: 1, color: 'green'});
-            game.addFruit({fruitId: 'fruit3', fruitX: 5, fruitY: 5, width: 1, height: 1, color: 'green'});
-
-            renderScreen(screen, game, requestAnimationFrame);
+            const socket = io();
+            socket.on('connect', () => {
+                const playerId = socket.id;
+                console.log(`Player connected on client with id ${playerId}`);
+            });
         </script>
     </body>
 </html>
