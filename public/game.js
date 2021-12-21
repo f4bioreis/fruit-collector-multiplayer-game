@@ -1,4 +1,4 @@
-export default function createGame() {
+exports.createGame = function createGame() {
     console.log('createGame: init');
     const state = {
         players: {},
