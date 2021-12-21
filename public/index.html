@@ -15,12 +15,13 @@
             </style>
             
         </meta>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js"></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js"></script>
     </head>
     <body>
         <canvas id="screen" width="10" height="10"></canvas>
         <script type="text/javascript">
             console.log('this is a script');
+            let socket = io('http://localhost:3000');
         </script>
     </body>
 </html>
