@@ -19,10 +19,26 @@
     </head>
     <body>
         <canvas id="screen" width="10" height="10"></canvas>
-        <script type="text/javascript">
-            const gameCreator = require('./public/game');
+        <script type="module">
+            import createGame from './game.mjs';
+            import createKeyboardListener from './keyboard-listener.mjs';
+            import renderScreen from './render-screen.mjs';
             console.log('this is a script');
+
             let socket = io('http://localhost:3000');
+            socket.on('setup', state => {
+                console.log('Receiving "setup" event from server');
+                console.log('Game state: ', state);
+                game.state = state;
+            });
+            const game = createGame();
+            console.log('game: ', game);
+
+            renderScreen(document.getElementById('screen'), game, requestAnimationFrame);
+            console.log('Screen has rendered');
+            const keyboardListener = createKeyboardListener(document);
+            keyboardListener.subscribe(game.movePlayer);
+            console.log('keyboardListener: ', keyboardListener);
         </script>
     </body>
 </html>

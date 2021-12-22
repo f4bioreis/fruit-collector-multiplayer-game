@@ -1,5 +1,4 @@
-exports.createGame = function createGame() {
-    console.log('createGame: init');
+export default function createGame() {
     const state = {
         players: {},
         fruits: {},
@@ -86,7 +85,7 @@ exports.createGame = function createGame() {
             checkForFruitCollision(playerId);
         }
 
-        function checkForFruitCollision(playerId) { // Brute force
+        function checkForFruitCollision(playerId) {
             let fruit;
             const player = state.players[playerId];
             for (const fruitId in state.fruits) {
