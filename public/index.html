@@ -29,7 +29,7 @@
             socket.on('setup', state => {
                 console.log('Receiving "setup" event from server');
                 console.log('Game state: ', state);
-                game.state = state;
+                game.setState(state);
             });
             const game = createGame();
             console.log('game: ', game);

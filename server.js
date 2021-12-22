@@ -39,7 +39,12 @@ server.listen(port, () => {
 
 sockets.on('connection', socket => {
    console.log(`Socket has connected: ${socket.id}`);
-   game.addPlayer({ playerId: socket.id, playerX: 1, playerY: 1, width: 1, height: 1, color: 'black'});
+   game.addPlayer({ playerId: socket.id, width: 1, height: 1, color: 'black'});
    game.addFruit({ fruitId: 'fruit1', fruitX: 8, fruitY: 9, width: 1, height: 1, color: 'green'});
    socket.emit('setup', game.state);
+
+   socket.on('disconnect', () => {
+      console.log('Removing player with ID ' + socket.id);
+      game.removePlayer({playerId: socket.id});
+   })
 });

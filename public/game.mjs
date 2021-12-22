@@ -11,11 +11,13 @@ export default function createGame() {
 
     function addPlayer(command) {
         const playerId = command.playerId;
-        const playerX = command.playerX;
-        const playerY = command.playerY;
+        const playerX = command.playerX in command ? command.playerX : Math.floor(Math.random() * state.screen.width);
+        const playerY = command.playerY in command ? command.playerY : Math.floor(Math.random() * state.screen.height);
         const playerWidth = command.width;
         const playerHeight = command.height;
         const playerColor = command.color;
+
+        console.log('Adding player in position (' + playerX + ', ' + playerY + ')');
 
         state.players[playerId] = {
             x: playerX,
@@ -99,12 +101,17 @@ export default function createGame() {
         
     }
 
+    function setState(newState) {
+        Object.assign(state, newState);
+    }
+
     return {
         addPlayer,
         removePlayer,
         movePlayer,
         addFruit,
         removeFruit,
+        setState,
         state
     };
 }
