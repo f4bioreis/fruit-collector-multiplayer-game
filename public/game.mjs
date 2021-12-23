@@ -7,15 +7,31 @@ export default function createGame() {
             height: 10
         }
     };
+    const observers = [];
     const currentPlayerId = 'player1';
+
+    function start() {
+        // const frequency = 2000;
+        // setInterval(addFruit, frequency);
+    }
+
+    function subscribe(observerFunction) {
+        observers.push(observerFunction);
+    }
+
+    function notifyAll(command) {
+        for (const observerFunction of observers) {
+            observerFunction(command);
+        }
+    }
 
     function addPlayer(command) {
         const playerId = command.playerId;
-        const playerX = command.playerX in command ? command.playerX : Math.floor(Math.random() * state.screen.width);
-        const playerY = command.playerY in command ? command.playerY : Math.floor(Math.random() * state.screen.height);
-        const playerWidth = command.width;
-        const playerHeight = command.height;
-        const playerColor = command.color;
+        const playerX = 'playerX' in command ? command.playerX : Math.floor(Math.random() * state.screen.width);
+        const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random() * state.screen.height);
+        const playerWidth = 'width' in command ? command.width : 1;
+        const playerHeight = 'height' in command ? command.height : 1;
+        const playerColor = 'color' in command ? command.color : 1;
 
         console.log('Adding player in position (' + playerX + ', ' + playerY + ')');
 
@@ -26,20 +42,32 @@ export default function createGame() {
             height: playerHeight,
             color: playerColor
         };
+
+        notifyAll({
+            type: 'add-player',
+            playerId: playerId,
+            playerX: playerX,
+            playerY: playerY
+        });
     }
 
     function removePlayer(command) {
         const playerId = command.playerId;
         delete state.players[playerId];
+
+        notifyAll({
+            type: 'remove-player',
+            playerId: playerId
+        });
     }
 
     function addFruit(command) {
-        const fruitId = command.fruitId;
-        const fruitX = command.fruitX;
-        const fruitY = command.fruitY;
-        const fruitWidth = command.width;
-        const fruitHeight = command.height;
-        const fruitColor = command.color;
+        const fruitId = command ? command.fruitId : Math.floor(Math.random() * 10000000)
+        const fruitX = command && 'fruitX' in command ? command.fruitX : Math.floor(Math.random() * state.screen.width)
+        const fruitY = command && 'fruitY' in command ? command.fruitY : Math.floor(Math.random() * state.screen.height)
+        const fruitWidth = command && 'width' in command ? command.width : 1;
+        const fruitHeight = command &&  command &&  'height' in command ? command.height : 1;
+        const fruitColor = command && 'color in command' ? command.color : 'green';
 
         state.fruits[fruitId] = {
             x: fruitX,
@@ -106,12 +134,14 @@ export default function createGame() {
     }
 
     return {
+        start,
         addPlayer,
         removePlayer,
         movePlayer,
         addFruit,
         removeFruit,
         setState,
+        subscribe,
         state
     };
 }

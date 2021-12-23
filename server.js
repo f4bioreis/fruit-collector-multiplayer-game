@@ -28,6 +28,11 @@ app.use(express.static('public'));
 // });
 
 const game = createGame();
+game.start();
+game.subscribe(command => {
+   console.log(`> Emitting: ${command.type}`);
+   sockets.emit(command.type, command);
+})
 
 if (game) {
    console.log('Game state: ', game.state);
@@ -39,12 +44,20 @@ server.listen(port, () => {
 
 sockets.on('connection', socket => {
    console.log(`Socket has connected: ${socket.id}`);
+   const playerId = socket.id;
    game.addPlayer({ playerId: socket.id, width: 1, height: 1, color: 'black'});
    game.addFruit({ fruitId: 'fruit1', fruitX: 8, fruitY: 9, width: 1, height: 1, color: 'green'});
    socket.emit('setup', game.state);
 
    socket.on('disconnect', () => {
       console.log('Removing player with ID ' + socket.id);
-      game.removePlayer({playerId: socket.id});
+      game.removePlayer({playerId: playerId});
+   });
+
+   socket.on('move-player', command => {
+      command.playerId = playerId;
+      command.type = 'move-player';
+      
+      game.movePlayer(command);
    })
 });
