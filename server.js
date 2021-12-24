@@ -15,6 +15,7 @@ const game = createGame();
 game.start();
 game.subscribe(command => {
    console.log(`> Emitting: ${command.type}`);
+   console.log('All fruits: ', game.state.fruits);
    sockets.emit(command.type, command);
 })
 
@@ -31,6 +32,7 @@ sockets.on('connection', socket => {
    const playerId = socket.id;
    game.addPlayer({ playerId: socket.id, width: 1, height: 1});
    game.addFruit({ fruitId: 'fruit1', fruitX: 8, fruitY: 9, width: 1, height: 1, color: 'green'});
+   console.log('Passing server game state to client');
    socket.emit('setup', game.state);
 
    socket.on('disconnect', () => {
@@ -44,4 +46,5 @@ sockets.on('connection', socket => {
       command.type = 'move-player';
       game.movePlayer(command);
    });
+   
 });

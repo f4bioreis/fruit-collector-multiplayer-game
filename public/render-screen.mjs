@@ -11,7 +11,7 @@ export default function renderScreen(screen, game, requestAnimationFrame, curren
     let fruit;
     for (const fruitId in game.state.fruits) {
         fruit = game.state.fruits[fruitId];
-        context.fillStyle = fruit.color;
+        context.fillStyle = fruit.color ? fruit.color : 'green';
         context.fillRect(fruit.x, fruit.y, fruit.width, fruit.height);
     }
 

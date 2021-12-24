@@ -10,7 +10,7 @@ export default function createGame() {
     const observers = [];
 
     function start() {
-        const frequency = 2000;
+        const frequency = 5000;
         setInterval(addFruit, frequency);
     }
 
@@ -44,9 +44,9 @@ export default function createGame() {
 
         notifyAll({
             type: 'add-player',
-            playerId: playerId,
-            playerX: playerX,
-            playerY: playerY
+            playerId,
+            playerX,
+            playerY
         });
     }
 
@@ -75,11 +75,23 @@ export default function createGame() {
             height: fruitHeight,
             color: fruitColor
         };
+
+        notifyAll({
+            type: 'add-fruit',
+            fruitId,
+            fruitX,
+            fruitY
+        });
     }
 
     function removeFruit(command) {
         const fruitId = command.fruitId;
         delete state.fruits[fruitId];
+
+        notifyAll({
+            type: 'remove-fruit',
+            fruitId
+        });
     }
     
     function movePlayer(command) {

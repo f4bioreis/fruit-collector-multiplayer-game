@@ -34,8 +34,16 @@ socket.on('move-player', command => {
     if (playerId !== command.playerId) {
         game.movePlayer(command);
     }
-})
+});
 
 socket.on('remove-player', command => {
     game.removePlayer(command);
 });
+
+socket.on('add-fruit', command => {
+    game.addFruit(command);
+});
+
+// socket.on('remove-fruit', command => {
+//     game.removeFruit(command);
+// })
