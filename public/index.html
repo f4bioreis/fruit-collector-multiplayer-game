@@ -3,56 +3,14 @@
         <meta charset="UTF-8">
             <title>Jogo</title>
 
-            <style>
-                #screen {
-                    border: 10px solid #CCC;
-                    width: 400px;
-                    height: 400px;
-                    image-rendering: pixelated;
-                    image-rendering: crisp-edges;
-                    image-rendering: -moz-crisp-edges;
-                }
-            </style>
+            <link rel="stylesheet" href="styles.css">
             
         </meta>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.js"></script>
     </head>
     <body>
         <canvas id="screen" width="10" height="10"></canvas>
-        <script type="module">
-            import createGame from './game.mjs';
-            import createKeyboardListener from './keyboard-listener.mjs';
-            import renderScreen from './render-screen.mjs';
-            console.log('this is a script');
-
-            const game = createGame();
-            console.log('game: ', game);
-            const keyboardListener = createKeyboardListener();
-
-            let socket = io('http://localhost:3000');
-            socket.on('setup', state => {
-                console.log('Receiving "setup" event from server');
-                console.log('Game state: ', state);
-                const playerId = socket.id;
-                game.setState(state);
-                keyboardListener.subscribe(game.movePlayer);
-                keyboardListener.registerPlayerId(playerId);
-            });
-            
-            socket.on('add-player', command => {
-                console.log(`Receiving ${command.type} from player ${command.playerId}`);
-                console.log('command: ', command);
-                game.addPlayer(command);
-                console.log('updated game state: ', game.state);
-            });
-
-            socket.on('remove-player', command => {
-                console.log(`Receiving ${command.type} from player ${command.playerId}`);
-                game.removePlayer(command);
-            })
-
-            renderScreen(document.getElementById('screen'), game, requestAnimationFrame);
-            console.log('Screen has rendered');
+        <script type="module" src="controller.js">
         </script>
     </body>
 </html>

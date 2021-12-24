@@ -8,11 +8,10 @@ export default function createGame() {
         }
     };
     const observers = [];
-    const currentPlayerId = 'player1';
 
     function start() {
-        // const frequency = 2000;
-        // setInterval(addFruit, frequency);
+        const frequency = 2000;
+        setInterval(addFruit, frequency);
     }
 
     function subscribe(observerFunction) {
@@ -31,7 +30,7 @@ export default function createGame() {
         const playerY = 'playerY' in command ? command.playerY : Math.floor(Math.random() * state.screen.height);
         const playerWidth = 'width' in command ? command.width : 1;
         const playerHeight = 'height' in command ? command.height : 1;
-        const playerColor = 'color' in command ? command.color : 1;
+        const playerColor = 'color' in command ? command.color : 'black';
 
         console.log('Adding player in position (' + playerX + ', ' + playerY + ')');
 
@@ -57,7 +56,7 @@ export default function createGame() {
 
         notifyAll({
             type: 'remove-player',
-            playerId: playerId
+            playerId
         });
     }
 
@@ -85,24 +84,51 @@ export default function createGame() {
     
     function movePlayer(command) {
         console.log(`Moving player ${command.playerId} with command ${command.keyPressed}`);
+        
+        notifyAll(command);
 
         const acceptedMoves = {
             ArrowUp(player) {
-                player.y--;
-                console.log(state.players[currentPlayerId].x, state.players[currentPlayerId].y);
+                // checks whether the player is beyond the upper border
+                if (player.y <= 0) {
+                    player.y = state.screen.height - 1;
+                }
+                else {
+                    player.y--;
+                }
+                console.log(player.x, player.y);
             },
             ArrowDown(player) {
-                player.y++;
-                console.log(state.players[currentPlayerId].x, state.players[currentPlayerId].y);
+                // checks whether the player is beyond the lower border
+                if (player.y >= state.screen.height - 1) {
+                    player.y = 0;
+                }
+                else {
+                    player.y++;
+                }
+                console.log(player.x, player.y);
             },
-            ArrowRight(player) {        
-                player.x++;
-                console.log(state.players[currentPlayerId].x, state.players[currentPlayerId].y);
+            ArrowRight(player) {
+                // checks whether the player is beyond the right border
+                if (player.x >= state.screen.width - 1) {
+                    player.x = 0;    
+                }
+                else {
+                    player.x++;    
+                }
+                console.log(player.x, player.y);
             },
             ArrowLeft(player) {
-                player.x--;
-                console.log(state.players[currentPlayerId].x, state.players[currentPlayerId].y);
+                // checks whether the player is beyond the left border
+                if (player.x <= 0) {
+                    player.x = state.screen.width - 1;
+                }
+                else {
+                    player.x--;    
+                }
+                console.log(player.x, player.y);
             }
+
         }
 
         const player = state.players[command.playerId];
