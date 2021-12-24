@@ -1,1 +1,1 @@
-A little multiplayer game I created with the purpose of practicing software engineering design patterns
+A little multiplayer game I created with the purpose of applying software engineering design patterns
