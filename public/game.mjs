@@ -102,42 +102,22 @@ export default function createGame() {
         const acceptedMoves = {
             ArrowUp(player) {
                 // checks whether the player is beyond the upper border
-                if (player.y <= 0) {
-                    player.y = state.screen.height - 1;
-                }
-                else {
-                    player.y--;
-                }
+                player.y = (player.y - 1 + state.screen.height) % state.screen.height;
                 console.log(player.x, player.y);
             },
             ArrowDown(player) {
                 // checks whether the player is beyond the lower border
-                if (player.y >= state.screen.height - 1) {
-                    player.y = 0;
-                }
-                else {
-                    player.y++;
-                }
+                player.y = (player.y + 1) % state.screen.height;
                 console.log(player.x, player.y);
             },
             ArrowRight(player) {
                 // checks whether the player is beyond the right border
-                if (player.x >= state.screen.width - 1) {
-                    player.x = 0;    
-                }
-                else {
-                    player.x++;    
-                }
+                player.x = (player.x + 1) % state.screen.width;
                 console.log(player.x, player.y);
             },
             ArrowLeft(player) {
                 // checks whether the player is beyond the left border
-                if (player.x <= 0) {
-                    player.x = state.screen.width - 1;
-                }
-                else {
-                    player.x--;    
-                }
+                player.x = (player.x - 1 + state.screen.width) % state.screen.width;
                 console.log(player.x, player.y);
             }
 
